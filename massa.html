@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Масса дома</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EDEFF2;--sf:#fff;--ink:#14202B;--mu:#5E6B78;--ln:#D8DDE3;--ac:#2B4BFF;--ac2:#fff;--ok:#16915F;--wn:#C97800;--bd:#D6372E;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F151B;--sf:#18212A;--ink:#E8EDF2;--mu:#93A0AD;--ln:#2A3541;--ac:#7C95FF;--ac2:#0F151B;--ok:#3DCB8F;--wn:#F0A53A;--bd:#FF7A70;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F151B;--sf:#18212A;--ink:#E8EDF2;--mu:#93A0AD;--ln:#2A3541;--ac:#7C95FF;--ac2:#0F151B;--ok:#3DCB8F;--wn:#F0A53A;--bd:#FF7A70;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Manrope,-apple-system,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+main{max-width:620px;margin:0 auto;padding:22px 18px calc(104px + env(safe-area-inset-bottom,0px))}
+h1,h2,h3,.num{font-family:Unbounded,"Arial Black",sans-serif;font-weight:700;letter-spacing:-.01em}
+h1{font-size:23px;line-height:1.25;margin:6px 0 6px}h2{font-size:17px;margin:24px 0 10px}h3{font-size:14px;line-height:1.35;margin:0}
+p{margin:8px 0}.mu{color:var(--mu);font-size:13px;line-height:1.5}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 8px rgba(20,32,43,.025)}
+.row{display:flex;gap:10px;align-items:center}.row>*{min-width:0}.sp{justify-content:space-between}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;gap:4px;background:var(--sf);border-top:1px solid var(--ln);padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 16px rgba(20,32,43,.04)}
+nav button{flex:1;min-width:0;background:none;border:0;color:var(--mu);font:600 11px Manrope,sans-serif;padding:9px 3px;border-radius:10px;white-space:nowrap}
+nav button.on{color:var(--ac2);background:var(--ac)}
+button,input,select{font:inherit;color:inherit}
+.btn{background:var(--ac);color:var(--ac2);border:0;border-radius:11px;padding:10px 13px;font-size:14px;font-weight:800;white-space:nowrap}
+.btn.g{background:none;color:var(--ink);border:1px solid var(--ln)}
+input,select{width:100%;min-width:0;background:var(--bg);border:1px solid var(--ln);border-radius:11px;padding:10px 12px;min-height:44px;font-size:14px}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.bar{height:8px;background:var(--bg);border-radius:99px;overflow:hidden;margin:7px 0 12px}.bar i{display:block;height:100%;background:var(--ac);border-radius:6px}
+.bar.ok i{background:var(--ok)}.bar.bd i{background:var(--bd)}
+.big{font-size:31px;line-height:1.15}
+details{border-top:1px solid var(--ln);padding:10px 0}details:first-of-type{border-top:0}
+summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}summary::-webkit-details-marker{display:none}summary:after{content:"＋";display:inline-flex;align-items:center;justify-content:center;margin-left:auto;width:20px;height:20px;flex:0 0 20px;border:1px solid var(--ln);border-radius:6px;color:var(--ac);font-size:12px;font-weight:700;line-height:1}details[open]>summary:after{content:"−"}.history-day{margin:10px 0}.delrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--ln)}details>summary{font-weight:700}details[open]>summary{margin-bottom:10px}
+.tag{display:inline-block;background:var(--bg);border-radius:8px;padding:2px 8px;font-size:13px;font-weight:600}
+.x{background:none;border:0;color:var(--bd);font-size:20px;min-width:36px;min-height:36px;border-radius:9px}.lbl{font-weight:800;font-size:12px;color:var(--mu);margin:12px 0 6px}.tag{white-space:nowrap}
+.adv{border-left:4px solid var(--wn)}.adv.ok{border-color:var(--ok)}
+.lbl{font-weight:800;font-size:13px;color:var(--mu);margin-top:8px}
+@media (max-width:390px){main{padding-left:13px;padding-right:13px}.card{padding:13px}h1{font-size:21px}nav button{font-size:10px}}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .3s}}
+</style></head>
+<body><main id="app"></main>
+<nav id="nav"></nav>
+<script>
+var mem={};
+var S={get:function(k,d){try{var v=localStorage.getItem(k);return v===null?(k in mem?mem[k]:d):JSON.parse(v)}catch(e){return k in mem?mem[k]:d}},
+set:function(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+var $=function(s){return document.querySelector(s)};
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var today=new Date().toLocaleDateString('sv');
+var tab=0,sel=0;
+var TABS=['Старт','Тренировки','Еда','Вода и вес'];
+
+/* ---------- нормы ---------- */
+function weight(){var w=S.get('w',[]);return w.length?w[w.length-1].v:58.5}
+function T(){var w=weight(),bk=S.get('bk',0);
+var k=Math.round((((10*w+6.25*176-5*25+5)*1.4)+400+bk)/50)*50;
+var p=Math.round(2*w),f=Math.round(1.2*w),c=Math.round((k-4*p-9*f)/4);
+return{k:k,p:p,f:f,c:c,water:Math.round(w*40/100)*100+500}}
+
+/* ---------- продукты на 100 г: ккал, Б, Ж, У, вес штуки ---------- */
+var FOODS=[['Гейнер (поправь по этикетке)',380,20,5,65],['Протеин',400,80,6,7],['Куриная грудка варёная',135,29,2,0],['Говядина варёная',220,26,13,0],['Тунец в собственном соку',96,22,1,0],['Яйцо варёное',157,13,11,1,55],['Творог 5%',121,17,5,3],['Сыр',350,25,27,0],['Молоко 2,5%',52,3,2.5,5],['Кефир 2,5%',53,3,2.5,4],['Рис варёный',130,3,0.3,28],['Гречка варёная',110,4,1,21],['Макароны варёные',158,6,1,31],['Овсянка сухая',370,13,7,60],['Картофель варёный',82,2,0.4,17],['Хлеб',250,8,3,49,30],['Банан',96,1.5,0.5,22,120],['Яблоко',47,0.4,0.4,10,180],['Арахис',580,26,49,10],['Оливковое масло',900,0,100,0],['Сливочное масло',740,0.5,82,1],['Сметана 20%',205,2.5,20,3.4],['Зефир',320,1,0,79,35],['Мармелад',300,0,0,75],['Кукурузные хлопья',360,7,1,83]];
+function allFoods(){return FOODS.concat(S.get('cf',[]))}
+
+/* ---------- упражнения ---------- */
+var E={
+push:['Отжимания','Ладони чуть шире плеч, корпус — прямая линия от пяток до макушки. Опускайся 3 секунды до касания грудью пола, пауза 1 сек, мощно вверх. Локти под углом ~45°.','Вдох — вниз, выдох — вверх.','Дошёл до верхней границы повторов во всех подходах → ноги на стул, затем рюкзак с книгами на спину. Медленный негатив и пауза внизу тоже усложняют.'],
+dbp:['Жим гантелей лёжа на полу','Лёжа на полу, колени согнуты. Гантели над грудью, опускай 3 сек до касания локтями пола, пауза, жми вверх, не сводя гантели в замок.','Вдох — вниз, выдох — вверх.','5 кг мало: делай негатив 4 сек, пауза 2 сек, потом одну руку за раз. Когда 20 повторов легко — переходи на отжимания с отягощением.'],
+row1:['Тяга рюкзака одной рукой','Упрись свободной рукой в стул, спина прямая, корпус почти параллельно полу. Тяни рюкзак к поясу, локоть вдоль корпуса, в верхней точке сведи лопатку, пауза 1 сек.','Выдох — тяга, вдох — опускание.','Грузи рюкзак: книги, бутылки с водой. Добавляй по 1–2 кг, когда делаешь верх диапазона. Медленный негатив 3 сек.'],
+row2:['Тяга рюкзака к поясу двумя руками','Ноги на ширине плеч, колени мягкие, наклон корпуса ~45°, спина ровная. Рюкзак за лямки или ручку тяни к низу живота, локти назад.','Выдох — тяга, вдох — вниз.','Добавляй вес в рюкзак; в верхней точке держи 2 сек; опускай 3 сек.'],
+ohp:['Жим гантелей стоя','Гантели у плеч, ягодицы и пресс напряжены, не прогибай поясницу. Жми вверх по дуге, вверху не стучи гантелями, опускай 3 сек.','Вдох — перед жимом, выдох — на подъёме.','Когда 20 повторов даются легко: жим одной рукой, медленный негатив 4 сек, пауза у плеч.'],
+curl:['Сгибания на бицепс','Локти прижаты к корпусу, не раскачивайся. Подними гантель до пика, сожми бицепс на 1 сек, опускай 4 секунды до полного разгибания.','Выдох — подъём, вдох — опускание.','5 кг вместо 12: бери одну руку за раз, негатив 4–5 сек, пауза в верхней точке и в растяжении, последние повторы в стиле 21 (7 нижняя половина, 7 верхняя, 7 полностью). Либо сумка-рюкзак с книгами за ручку.'],
+ham:['Молотки','Нейтральный хват (ладони смотрят друг на друга), локти у корпуса. Подъём плавно, без рывка, вверху сожми, вниз 3 сек.','Выдох — вверх, вдох — вниз.','Так же, как бицепс: медленный негатив, одна рука, пауза.'],
+tri:['Французский жим из-за головы','Одну гантель держи двумя руками над головой. Локти смотрят вперёд, зафиксированы. Опускай за голову 3 сек до растяжения, разгибай вверх до конца.','Вдох — вниз, выдох — вверх.','Одна рука с гантелью 5 кг, негатив 4 сек. Либо узкие отжимания (ладони на ширине плеч, локти вдоль корпуса).'],
+lat:['Махи в стороны (средняя дельта)','Лёгкий наклон корпуса, гантели вдоль тела. Поднимай в стороны до уровня плеч, локоть чуть выше кисти, вверху 1 сек, вниз 3 сек.','Выдох — подъём, вдох — вниз.','5 кг для махов уже тяжело: повторы 15–25, пауза вверху, частичные повторы в конце.'],
+shrug:['Шраги с рюкзаком','Рюкзак в руках вдоль бёдер, спина прямая. Поднимай плечи к ушам, вверху пауза 2 сек, не вращай плечами.','Выдох — вверх, вдох — вниз.','Добавляй вес в рюкзак, держи 3 сек в верхней точке.'],
+bulg:['Болгарские выпады с рюкзаком','Задняя нога на стуле, рюкзак на груди или на спине. Опускайся на 3 сек до параллели бедра, колено не заваливай внутрь, вставай через пятку.','Вдох — вниз, выдох — вверх.','Добавляй вес в рюкзак по 1–2 кг, как только пройдёшь верх диапазона. Пауза 2 сек внизу.'],
+rdl:['Румынская тяга с рюкзаком','Колени мягкие, спина прямая. Отводи таз назад, рюкзак скользит вдоль ног до середины голени, чувствуй растяжение задней поверхности бедра, встань за счёт ягодиц.','Вдох — вниз, выдох — вверх.','На одной ноге, с тяжёлым рюкзаком, медленный негатив 4 сек.'],
+glute:['Ягодичный мостик','Лёжа на спине, стопы у ягодиц, рюкзак на тазу. Подними таз до прямой линии плеч-таз-колени, сожми ягодицы 2 сек.','Выдох — вверх, вдох — вниз.','Рюкзак тяжелее; потом на одной ноге.'],
+calf:['Подъёмы на носки одной ногой','Носок на краю ступеньки, рука держится за стену. Максимально высоко на носок, пауза 1 сек, опускайся до растяжения 3 сек.','Выдох — вверх, вдох — вниз.','Рюкзак в свободной руке, повторы до 25.'],
+plank:['Планка','Предплечья под плечами, таз в линию с телом, живот и ягодицы напряжены. Не провисай в пояснице.','Дыши ровно, не задерживай дыхание.','Добавляй по 10 сек за неделю; потом планка с поднятой ногой.']
+};
+var D=[
+['Пн','Верх A',[['push','4×8–15'],['row1','4×10–15'],['dbp','3×10–15'],['ohp','3×12–20'],['curl','3×12–20']]],
+['Вт','Ноги',[['bulg','4×8–12'],['rdl','3×10–12'],['glute','3×12–15'],['calf','4×15–25'],['plank','3×30–60 с']]],
+['Чт','Верх B',[['row2','4×10–15'],['tri','3×12–15'],['lat','4×15–25'],['shrug','3×15–20'],['ham','3×12–20']]],
+['Сб','Ноги + руки',[['rdl','3×10–12'],['bulg','3×8–12'],['calf','4×15–25'],['curl','3×12–20'],['tri','3×12–15']]]];
+
+/* ---------- экраны ---------- */
+function bar(v,max,cls){var p=Math.min(100,Math.round(v/max*100));return '<div class="bar '+(cls||'')+'"><i style="width:'+p+'%"></i></div>'}
+function fmtDate(d){var a=String(d||today).split('-');return a.length===3?Number(a[2])+' '+(['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'][Number(a[1])-1]||a[1])+' '+a[0]:d}
+function totals(L){return {k:Math.round(L.f.reduce(function(s,x){return s+(+x[2]||0)},0)),p:Math.round(L.f.reduce(function(s,x){return s+(+x[3]||0)},0)),f:Math.round(L.f.reduce(function(s,x){return s+(+x[4]||0)},0)),c:Math.round(L.f.reduce(function(s,x){return s+(+x[5]||0)},0))}}
+function start(){var t=T(),L=log(),a=totals(L),cur=weight(),goal=68,wp=Math.max(0,Math.min(100,(cur-58.5)/(goal-58.5)*100));return '<h1>Твой прогресс</h1><p class="mu">'+fmtDate(today)+' · '+cur+' кг</p><div class="card"><div class="row sp"><div><div class="mu">Цель по весу</div><div class="num big">'+cur+' <span class="mu">→ '+goal+' кг</span></div></div><span class="tag">'+Math.max(0,(goal-cur).toFixed(1))+' кг до цели</span></div>'+bar(wp,100,'ok')+'<p class="mu">Следи за тенденцией веса, а не за колебаниями за один день.</p></div><div class="card"><div class="row sp"><h3>Питание сегодня</h3><span class="tag">'+Math.min(100,Math.round(a.k/t.k*100))+'%</span></div><p><b>'+a.k+'</b> из '+t.k+' ккал</p>'+bar(a.k,t.k,a.k>=t.k*.9?'ok':'')+'<p class="mu">Белки '+a.p+'/'+t.p+' г · Жиры '+a.f+'/'+t.f+' г · Углеводы '+a.c+'/'+t.c+' г</p><button class="btn" data-goto="2">Записать еду</button></div><div class="card"><div class="row sp"><h3>Вода сегодня</h3><b>'+(L.w/1000).toFixed(2)+' / '+(t.water/1000).toFixed(1)+' л</b></div>'+bar(L.w,t.water,L.w>=t.water?'ok':'')+'<button class="btn g" data-goto="3">Вода и вес</button></div><div class="card"><h3>План на массу</h3><p>4 тренировки в неделю · профицит калорий · постепенное увеличение нагрузки · сон 7–9 часов.</p></div>'}
+
+function noteKey(d,k){return 'n:'+d+k}
+function train(){var h='<h1>Тренировки</h1><p class="mu">Нажми на упражнение, чтобы раскрыть детали. Значок ＋ показывает, что карточка раскрывается.</p><div class="card adv"><b>Как прогрессировать с гантелями по 5 кг</b><p>Оставляй 1–2 повтора в запасе. Когда верхняя граница повторов даётся во всех подходах — постепенно добавляй вес в рюкзак или переходи к более сложному варианту. Если можешь легко сделать 25–30 повторов, нагрузки уже может быть мало: разборные гантели или утяжеление станут полезнее.</p><p class="mu">Для набора мышц нужны достаточная нагрузка, прогрессия, питание и восстановление. Одних гантелей по 5 кг со временем может не хватить.</p></div>';
+D.forEach(function(d,i){h+='<div class="card"><div class="row sp"><h3>'+d[0]+' — '+d[1]+'</h3></div>';
+d[2].forEach(function(x){var e=E[x[0]],k=noteKey(i,x[0]);
+h+='<details><summary class="row sp"><b>'+e[0]+'</b><span class="tag">'+x[1]+'</span></summary>'+
+'<p>'+e[1]+'</p><p><b>Дыхание:</b> '+e[2]+'</p><p><b>Прогрессия:</b> '+e[3]+'</p>'+
+'<div class="lbl">Запиши, что сделал сегодня (прошлый раз → побей)</div><input data-n="'+k+'" value="'+esc(S.get(k,''))+'" placeholder="например 4×12, рюкзак 6 кг"></details>'});
+h+='</div>'});return h}
+
+function log(d){var L=S.get('log:'+(d||today),{f:[],w:0,waterLog:[]});if(!Array.isArray(L.waterLog))L.waterLog=L.w?[{ml:+L.w,time:'Ранее'}]:[];return L}
+function saveLog(L,d){d=d||today;if(!Array.isArray(L.waterLog))L.waterLog=[];L.w=L.waterLog.reduce(function(a,x){return a+(+x.ml||0)},0);S.set('log:'+d,L);var days=S.get('days',[]);if(days.indexOf(d)<0){days.push(d);days.sort();S.set('days',days)}}
+function adviceBox(L,t){var a=function(k){var ix={k:2,p:3,f:4,c:5}[k];return L.f.reduce(function(s,x){return s+(+x[ix]||0)},0)};
+var r={k:t.k-a('k'),p:t.p-a('p'),f:t.f-a('f'),c:t.c-a('c')},m=[],F=allFoods();
+var g=function(name,need,idx){var f=F.filter(function(x){return x[0].indexOf(name)==0})[0];if(!f)return;var gr=Math.max(30,Math.round(Math.min(need/(f[idx]/100),400)/10)*10);m.push(gr+' г «'+f[0].split(' (')[0]+'» (+'+Math.round(f[1]*gr/100)+' ккал)')};
+if(L.f.length==0)return '<div class="card adv">Добавь первый приём пищи — я посчитаю остаток и подскажу, что съесть.</div>';
+if(r.k<-300)return '<div class="card adv">Перебор на '+Math.abs(Math.round(r.k))+' ккал. Один день не страшен, но стабильно выше нормы даёт жир, а не мышцы.</div>';
+if(r.p>12){g('Творог',r.p,2);g('Куриная',r.p,2);g('Протеин',r.p,2)}
+if(r.c>30){g('Рис',r.c,4);g('Банан',r.c,4);g('Зефир',r.c,4)}
+if(r.f>10){g('Арахис',r.f,3);g('Оливковое',r.f,3)}
+if(r.k>200&&m.length==0){g('Гейнер',r.k,1)}
+if(!m.length)return '<div class="card adv ok">Норма на сегодня закрыта. Отлично!</div>';
+return '<div class="card adv"><b>Осталось:</b> '+Math.max(0,Math.round(r.k))+' ккал · Б '+Math.max(0,Math.round(r.p))+' · Ж '+Math.max(0,Math.round(r.f))+' · У '+Math.max(0,Math.round(r.c))+' г.<br><b>Чем добрать:</b><br>'+m.slice(0,5).join('<br>')+'</div>'}
+
+function food(){var t=T(),L=log(),F=allFoods(),z=totals(L),rows=[['Ккал','k',t.k],['Белки','p',t.p],['Жиры','f',t.f],['Углеводы','c',t.c]],h='<h1>Еда сегодня</h1><p class="mu">'+fmtDate(today)+' · значения считаются по весу продукта</p>';
+rows.forEach(function(x){var v=z[x[1]],cl=v>x[2]*1.1?'bd':v>=x[2]*.9?'ok':'';h+='<div class="row sp"><b>'+x[0]+'</b><span>'+v+' / '+x[2]+(x[1]=='k'?'':' г')+'</span></div>'+bar(v,x[2],cl)});h+=adviceBox(L,t);
+h+='<div class="card"><div class="lbl">Продукт</div><select id="fs">'+F.map(function(f,i){return '<option value="'+i+'"'+(i==sel?' selected':'')+'>'+esc(f[0])+'</option>'}).join('')+'</select><div class="lbl">Вес в граммах <span id="pc" class="mu"></span></div><div class="row"><input id="fg" type="number" min="1" inputmode="decimal" placeholder="150"><button class="btn" id="add">Добавить</button></div></div>';
+h+='<div class="card"><h3>Найти продукт в интернете</h3><p class="mu">Поиск по Open Food Facts. Сверяй значения с упаковкой: данные могут быть неполными.</p><div class="row"><input id="foodsearch" placeholder="Например, молоко 2,5%"><button class="btn" id="searchfood">Найти</button></div><div id="foodresults"></div></div><h2>Съедено сегодня</h2>';
+if(!L.f.length)h+='<p class="mu">Пока пусто.</p>';L.f.forEach(function(x,i){h+='<div class="card row sp"><div><b>'+esc(x[0])+'</b> · '+x[1]+' г<div class="mu">'+Math.round(x[2])+' ккал · Б '+Math.round(x[3])+' · Ж '+Math.round(x[4])+' · У '+Math.round(x[5])+'</div></div><button class="x" data-del="'+i+'" aria-label="Удалить продукт">×</button></div>'});
+h+='<details class="card"><summary><b>Добавить свой продукт</b></summary><p class="mu">Значения на 100 г с упаковки.</p><div class="lbl">Название</div><input id="cn"><div class="row"><input id="ck" type="number" placeholder="ккал"><input id="cp" type="number" placeholder="Белки"></div><div class="row" style="margin-top:8px"><input id="cfat" type="number" placeholder="Жиры"><input id="cc" type="number" placeholder="Углеводы"></div><button class="btn" id="cadd" style="margin-top:10px">Сохранить продукт</button></details>';
+var days=S.get('days',[]);if(L.f.length&&days.indexOf(today)<0){days.push(today);S.set('days',days)}days=days.filter(function(d){return d!==today}).sort().reverse();h+='<h2>История питания</h2>';if(!days.length)h+='<p class="mu">Здесь появятся сохранённые дни.</p>';days.forEach(function(d){var q=log(d),v=totals(q);h+='<details class="card history-day"><summary><span>'+fmtDate(d)+'</span><span class="tag">'+v.k+' ккал</span></summary><p>Белки '+v.p+' г · Жиры '+v.f+' г · Углеводы '+v.c+' г</p><p>Вода: '+(q.w/1000).toFixed(2)+' л</p>';if(!q.f.length)h+='<p class="mu">Записей еды нет.</p>';q.f.forEach(function(x){h+='<div class="delrow"><div><b>'+esc(x[0])+'</b> · '+x[1]+' г<div class="mu">'+Math.round(x[2])+' ккал · Б '+Math.round(x[3])+' · Ж '+Math.round(x[4])+' · У '+Math.round(x[5])+'</div></div></div>'});h+='<p class="mu">'+(v.k>=t.k?'Калории закрыты':'Калории не добраны')+' · '+(v.p>=t.p?'белок закрыт':'белок не добран')+' · '+(v.f>=t.f?'жиры закрыты':'жиры не добраны')+' · '+(v.c>=t.c?'углеводы закрыты':'углеводы не добраны')+'</p></details>'});return h}
+
+function water(){var t=T(),L=log(),W=S.get('w',[]),n=W.length,wl=Array.isArray(L.waterLog)?L.waterLog:[];
+var h='<h1>Вода и вес</h1><p class="mu">Отмечай стакан сразу после того, как выпил. В полночь счётчик начнётся заново автоматически, а история останется.</p>';
+h+='<div class="card"><div class="row sp"><div><div class="mu">Выпито сегодня</div><div class="num big">'+(L.w/1000).toFixed(2)+' <span class="mu">л</span></div></div><span class="tag">цель '+(t.water/1000).toFixed(1)+' л</span></div>'+bar(L.w,t.water,L.w>=t.water?'ok':'')+'<div class="row"><button class="btn" data-wa="250">+ стакан · 250 мл</button><button class="btn g" data-wa="500">+ бутылка · 500 мл</button></div>';
+if(wl.length)h+='<div class="row sp" style="margin-top:12px"><span class="mu">Последняя запись: '+wl[wl.length-1].time+'</span><button class="btn g" id="waterundo">Отменить</button></div>';
+h+='<p class="mu">Это журнал, а не шкала, которую нужно сбрасывать вручную. Каждая запись привязана к сегодняшней дате.</p></div>';
+h+='<h2>Сегодняшние записи</h2><div class="card">';
+if(!wl.length)h+='<p class="mu">Пока ничего не записано. Нажми на стакан или бутылку после питья.</p>';
+wl.slice().reverse().forEach(function(x){h+='<div class="delrow"><span>'+x.time+'</span><b>'+x.ml+' мл</b></div>'});h+='</div>';
+h+='<h2>Вес</h2><div class="card"><div class="row"><input id="wi" type="number" inputmode="decimal" step="0.1" placeholder="Вес, кг"><button class="btn" id="ws">Записать</button></div><p class="mu">Лучше взвешиваться утром в похожих условиях и смотреть на динамику за недели.</p>';
+if(n){var sorted=W.map(function(x,i){return {x:x,i:i}}).sort(function(a,b){return a.x.d.localeCompare(b.x.d)||a.i-b.i}),last=sorted[sorted.length-1].x,prev=sorted.length>1?sorted[sorted.length-2].x:last;
+h+='<p><b>'+last.v+' кг</b> '+(sorted.length>1?'('+((last.v-prev.v)>=0?'+':'')+(last.v-prev.v).toFixed(1)+' кг к прошлому)':'')+'</p>';
+if(sorted.length>2&&last.v-sorted[sorted.length-3].x.v<0.2)h+='<div class="adv card">Вес почти не растёт две недели. Можно увеличить дневную норму примерно на 150–200 ккал.</div>';
+h+=sorted.slice(-12).reverse().map(function(o){return '<div class="delrow"><span>'+fmtDate(o.x.d)+' — <b>'+o.x.v+' кг</b></span><button class="x" data-wdel="'+o.i+'" aria-label="Удалить запись веса">×</button></div>'}).join('')}
+h+='</div>';if(S.get('bk',0))h+='<p class="mu">К норме добавлено +'+S.get('bk',0)+' ккал. <a href="#" id="bkr">Сбросить</a></p>';return h}
+
+function render(){$('#nav').innerHTML=TABS.map(function(n,i){return '<button class="'+(i==tab?'on':'')+'" data-t="'+i+'">'+n+'</button>'}).join('');
+$('#app').innerHTML=[start,train,food,water][tab]();
+window.scrollTo(0,0);
+var fs=$('#fs');if(fs){var upd=function(){sel=+fs.value;var f=allFoods()[sel];$('#pc').textContent=f[5]?'(1 шт ≈ '+f[5]+' г)':''};fs.onchange=upd;upd()}}
+
+document.addEventListener('click',function(e){var b=e.target.closest('button,a');if(!b)return;var L;
+if(b.dataset.t!==undefined){tab=+b.dataset.t;render()}
+else if(b.id=='add'){var g=+$('#fg').value,f=allFoods()[sel];if(!g)return;L=log();var q=g/100;L.f.push([f[0].split(' (')[0],g,f[1]*q,f[2]*q,f[3]*q,f[4]*q]);saveLog(L);render()}
+else if(b.dataset.del!==undefined){L=log();L.f.splice(+b.dataset.del,1);saveLog(L);render()}
+else if(b.id=='cadd'){var n=$('#cn').value.trim();if(!n)return;var c=S.get('cf',[]);c.push([n,+$('#ck').value||0,+$('#cp').value||0,+$('#cfat').value||0,+$('#cc').value||0]);S.set('cf',c);render()}
+else if(b.dataset.wa!==undefined){L=log();if(!Array.isArray(L.waterLog))L.waterLog=[];L.waterLog.push({ml:+b.dataset.wa,time:new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})});L.w=L.waterLog.reduce(function(a,x){return a+x.ml},0);saveLog(L);render()}
+else if(b.id=='waterundo'){L=log();if(Array.isArray(L.waterLog)&&L.waterLog.length)L.waterLog.pop();L.w=(L.waterLog||[]).reduce(function(a,x){return a+(+x.ml||0)},0);saveLog(L);render()}
+else if(b.id=='ws'){var v=+$('#wi').value;if(!v||v<20||v>400)return;var W=S.get('w',[]);W.push({d:today,v:v});S.set('w',W);render()}
+else if(b.dataset.wdel!==undefined){var W=S.get('w',[]);W.splice(+b.dataset.wdel,1);S.set('w',W);render()}
+else if(b.dataset.goto!==undefined){tab=+b.dataset.goto;render()}
+else if(b.id=='searchfood'){searchFoods()}
+else if(b.dataset.foodidx!==undefined){var box=$('#foodresults'),items=JSON.parse(decodeURIComponent(box.dataset.items||'%5B%5D')),f=items[+b.dataset.foodidx],g=+$('#foodgrams').value;if(!f||!g||g<=0){if($('#foodgrams'))$('#foodgrams').focus();return}L=log();var q=g/100;L.f.push([f.n,g,f.k*q,f.p*q,f.f*q,f.c*q]);saveLog(L);render()}
+else if(b.id=='bk'){S.set('bk',S.get('bk',0)+200);render()}
+else if(b.id=='bkr'){e.preventDefault();S.set('bk',0);render()}});
+function searchFoods(){var inp=$('#foodsearch'),q=inp&&inp.value.trim(),box=$('#foodresults');if(!q||!box)return;box.innerHTML='<p class="mu">Ищу продукты…</p>';
+var url='https://world.openfoodfacts.org/cgi/search.pl?json=1&search_terms='+encodeURIComponent(q)+'&page_size=8&fields=product_name,product_name_ru,nutriments,brands';
+fetch(url,{headers:{'Accept':'application/json'}}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(data){var items=[];(data.products||[]).forEach(function(p){var n=p.product_name_ru||p.product_name||'',u=p.nutriments||{},k=+(u['energy-kcal_100g']||u['energy-kcal']||0),pr=+(u.proteins_100g||0),fa=+(u.fat_100g||0),ca=+(u.carbohydrates_100g||0);if(n&&(k||pr||fa||ca))items.push({n:n,k:k,p:pr,f:fa,c:ca,brand:p.brands||''})});
+if(!items.length){box.innerHTML='<p class="mu">Не нашёл продукты с заполненными данными. Попробуй название бренда или добавь БЖУ с этикетки.</p>';return}
+var out='<div class="lbl">Результаты · значения на 100 г</div><div class="lbl">Сколько граммов?</div><input id="foodgrams" type="number" min="1" value="100" placeholder="100">';items.forEach(function(f,i){out+='<div class="delrow"><div style="flex:1"><b>'+esc(f.n)+'</b>'+(f.brand?'<div class="mini">'+esc(f.brand)+'</div>':'')+'<div class="mu">'+Math.round(f.k)+' ккал · Б '+f.p+' · Ж '+f.f+' · У '+f.c+'</div></div><button class="btn" data-foodidx="'+i+'">Добавить</button></div>'});box.innerHTML=out;box.dataset.items=encodeURIComponent(JSON.stringify(items))
+}).catch(function(){box.innerHTML='<p class="mu">Поиск не ответил. Возможные причины: нет подключения к интернету, блокировка внешних запросов или временная ошибка базы. Попробуй открыть сайт в браузере с доступом к интернету либо добавь продукт вручную.</p>'})}
+
+document.addEventListener('keydown',function(e){if(e.target&&e.target.id==='foodsearch'&&e.key==='Enter'){e.preventDefault();searchFoods()}});
+document.addEventListener('change',function(e){if(e.target.dataset&&e.target.dataset.n)S.set(e.target.dataset.n,e.target.value)});
+render();
+</script></body></html>
